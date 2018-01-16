@@ -3,6 +3,9 @@ package com.example.room.persistence.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.Relation;
+
+import java.util.List;
 
 /**
  * Created by felipe on 11/01/18.
@@ -24,7 +27,7 @@ public class Person {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

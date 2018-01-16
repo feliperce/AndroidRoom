@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.example.room.persistence.entity.Book;
 import com.example.room.persistence.entity.Person;
 import com.example.room.persistence.entity.PersonWithBook;
 
@@ -16,23 +17,23 @@ import java.util.List;
  */
 
 @Dao
-public interface PersonDao {
+public interface BookDao {
 
     @Insert
-    void insert(Person person);
+    void insert(Book book);
 
     @Update
-    void update(Person person);
+    void update(Book book);
 
     @Delete
-    void delete(Person person);
+    void delete(Book book);
 
-    @Query("SELECT * FROM person")
+    @Query("SELECT * FROM Book")
     List<PersonWithBook> getAll();
 
-    @Query("SELECT * FROM person WHERE id = :idperson")
-    Person getById(int idperson);
+    @Query("SELECT * FROM Book WHERE id = :idbook")
+    Person getById(int idbook);
 
-    @Query("SELECT * FROM person WHERE id = :idperson")
-    Person getByIdList(List<Long> idperson);
+    @Query("SELECT * FROM Book WHERE id = :idbook")
+    Person getByIdList(List<Long> idbook);
 }

@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import com.example.room.persistence.dao.BookDao;
 import com.example.room.persistence.dao.PersonDao;
 import com.example.room.persistence.entity.Book;
 import com.example.room.persistence.entity.Person;
@@ -19,16 +20,21 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
     public abstract PersonDao personDao();
+    public abstract BookDao bookDao();
 
-    public AppDatabase getAppDatabase(Context context) {
+    public static AppDatabase getAppDatabase(Context context) {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "mydb")
                     //.fallbackToDestructiveMigration() //Remove DB when migration are called
-                    //.allowMainThreadQueries()
+                    .allowMainThreadQueries()
                     .build();
         }
 
         return INSTANCE;
+    }
+
+    public static void destroyInstance() {
+        INSTANCE = null;
     }
 
 }

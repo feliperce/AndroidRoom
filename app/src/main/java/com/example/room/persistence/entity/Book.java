@@ -2,6 +2,7 @@ package com.example.room.persistence.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.util.Date;
@@ -19,14 +20,15 @@ public class Book {
     private int personId;
     private String name;
     private String author;
-    @ColumnInfo(name = "release_date")
+    //@ColumnInfo(name = "release_date")
+    @Ignore
     private Date releaseDate;
 
     public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
