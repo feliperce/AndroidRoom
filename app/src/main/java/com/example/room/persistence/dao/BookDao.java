@@ -28,12 +28,12 @@ public interface BookDao {
     @Delete
     void delete(Book book);
 
-    @Query("SELECT * FROM Book")
+    @Query("SELECT * FROM books")
     List<PersonWithBook> getAll();
 
-    @Query("SELECT * FROM Book WHERE id = :idbook")
-    Person getById(int idbook);
+    @Query("SELECT * FROM books WHERE id = :idbook")
+    Book getById(int idbook);
 
-    @Query("SELECT * FROM Book WHERE id = :idbook")
-    Person getByIdList(List<Long> idbook);
+    @Query("SELECT * FROM books WHERE id = :idbook")
+    Book getByIdList(List<Long> idbook);
 }
