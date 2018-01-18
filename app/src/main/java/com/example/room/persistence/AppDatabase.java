@@ -6,6 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.example.room.persistence.dao.BookDao;
+import com.example.room.persistence.dao.PersonBookDao;
 import com.example.room.persistence.dao.PersonDao;
 import com.example.room.persistence.entity.Book;
 import com.example.room.persistence.entity.Person;
@@ -21,6 +22,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract PersonDao personDao();
     public abstract BookDao bookDao();
+    public abstract PersonBookDao personBookDao();
 
     public static AppDatabase getAppDatabase(Context context) {
         if(INSTANCE == null) {
