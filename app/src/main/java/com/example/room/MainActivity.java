@@ -10,6 +10,7 @@ import com.example.room.persistence.entity.Person;
 import com.example.room.persistence.entity.PersonWithBook;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         book.setAuthor("AAAAAAA");
         book.setName("Nnnnnnn");
         book.setPersonId(1);
+        book.setReleaseDate(new Date());
         bookList.add(book);
 
         PersonWithBook personWithBook = new PersonWithBook();

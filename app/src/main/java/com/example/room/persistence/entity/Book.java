@@ -21,7 +21,6 @@ public class Book {
     private String name;
     private String author;
     //@ColumnInfo(name = "release_date")
-    @Ignore
     private Date releaseDate;
 
     public long getId() {
