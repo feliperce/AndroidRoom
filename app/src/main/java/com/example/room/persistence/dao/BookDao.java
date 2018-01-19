@@ -20,10 +20,10 @@ import java.util.List;
 public interface BookDao {
 
     @Insert
-    void insert(Book book);
+    long insert(Book book);
 
     @Update
-    void update(Book book);
+    long update(Book book);
 
     @Delete
     void delete(Book book);

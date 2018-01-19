@@ -19,10 +19,10 @@ import java.util.List;
 public interface PersonDao {
 
     @Insert
-    void insert(Person person);
+    long insert(Person person);
 
     @Update
-    void update(Person person);
+    long update(Person person);
 
     @Delete
     void delete(Person person);

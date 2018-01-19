@@ -31,7 +31,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "mydb")
                     .fallbackToDestructiveMigration() //Remove DB when migration are called
-                    .allowMainThreadQueries()
+                    //.allowMainThreadQueries()
                     .build();
         }
 
