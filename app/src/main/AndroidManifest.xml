@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".RelationActivity" />
-        <activity android:name=".PersonInsertActivity"></activity>
+        <activity android:name=".PersonInsertActivity" />
+        <activity android:name=".PersonDetailActivity"></activity>
     </application>
 
 </manifest>

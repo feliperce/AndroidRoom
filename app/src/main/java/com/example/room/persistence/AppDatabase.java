@@ -4,7 +4,6 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.ContentValues;
@@ -16,8 +15,6 @@ import com.example.room.persistence.dao.PersonBookDao;
 import com.example.room.persistence.dao.PersonDao;
 import com.example.room.persistence.entity.Book;
 import com.example.room.persistence.entity.Person;
-
-import java.util.Random;
 
 /**
  * Created by felipe on 11/01/18.
@@ -49,7 +46,7 @@ public abstract class AppDatabase extends RoomDatabase {
         INSTANCE = null;
     }
 
-    static final Migration MIGRATION_1_2 = new Migration(1,2) {
+    private static final Migration MIGRATION_1_2 = new Migration(1,2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             for(int i =0; i<10; i++) {
