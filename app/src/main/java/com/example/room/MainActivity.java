@@ -21,33 +21,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        AppDatabase db = AppDatabase.getAppDatabase(this);
-
-        Person person = new Person();
-        person.setFirstName("Aaaaaa");
-        person.setLastName("Bbbbbbb");
-        person.setAge(26);
-        person.setEmail("fdsfsd@gmail.com");
-
-        db.personDao().insert(person);
-
-        List<Book> bookList = new ArrayList<>();
-        Book book = new Book();
-        book.setAuthor("AAAAAAA");
-        book.setName("Nnnnnnn");
-        book.setPersonId(1);
-        book.setReleaseDate(new Date());
-        bookList.add(book);
-
-        PersonWithBook personWithBook = new PersonWithBook();
-        personWithBook.person = person;
-        personWithBook.bookList = bookList;
-
-        db.bookDao().insert(book);
-
-        //List<PersonWithBook> pb = db.personBookDao().loadPersonsAndBooks();
-        //Log.d("aaaaaaaa", pb.get(0).person.getEmail());
     }
 
     public void roomRelationClick(View view) {

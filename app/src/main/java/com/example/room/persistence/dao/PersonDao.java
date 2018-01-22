@@ -22,7 +22,7 @@ public interface PersonDao {
     long insert(Person person);
 
     @Update
-    long update(Person person);
+    int update(Person person);
 
     @Delete
     void delete(Person person);

@@ -23,7 +23,7 @@ public interface BookDao {
     long insert(Book book);
 
     @Update
-    long update(Book book);
+    int update(Book book);
 
     @Delete
     void delete(Book book);

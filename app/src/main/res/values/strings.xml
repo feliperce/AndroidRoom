@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Room</string>
     <string name="room_relation_btn">Room @Relation</string>
+    <string name="first_name_hint">First name</string>
+    <string name="last_name_hint">Last name</string>
+    <string name="email_hint">Email</string>
+    <string name="age_hint">Age</string>
+    <string name="register_person_button">Register Person</string>
 </resources>

@@ -1,7 +1,10 @@
 package com.example.room;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.room.persistence.AppDatabase;
 import com.example.room.persistence.entity.Book;
@@ -19,7 +22,7 @@ public class RelationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relation);
 
-        AppDatabase db = AppDatabase.getAppDatabase(this);
+        /*AppDatabase db = AppDatabase.getAppDatabase(this);
 
         Person person = new Person();
         person.setFirstName("Aaaaaa");
@@ -41,7 +44,12 @@ public class RelationActivity extends AppCompatActivity {
         personWithBook.person = person;
         personWithBook.bookList = bookList;
 
-        db.bookDao().insert(book);
+        db.bookDao().insert(book);*/
+    }
+
+    public void fabClick(View view) {
+        Intent it = new Intent(this, PersonInsertActivity.class);
+        startActivity(it);
     }
     
 }
