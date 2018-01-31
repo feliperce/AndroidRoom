@@ -1,11 +1,15 @@
 package com.example.room;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.SimpleAdapter;
@@ -23,6 +27,7 @@ import java.util.List;
 public class RelationActivity extends AppCompatActivity {
 
     private RecyclerView personRecyclerView;
+    private List<PersonWithBook> personWithBookList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +36,27 @@ public class RelationActivity extends AppCompatActivity {
 
         personRecyclerView = findViewById(R.id.personRecyclerView);
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1);
+        personWithBookList = new ArrayList<>(0);
+
+        final PersonWithBookAdapter arrayAdapter = new PersonWithBookAdapter(personWithBookList);
+
+        personRecyclerView.setLayoutManager(
+                new LinearLayoutManager(this,
+                        LinearLayoutManager.VERTICAL, false));
+        personRecyclerView.setAdapter(arrayAdapter);
+
+        AppDatabase db = AppDatabase.getAppDatabase(this);
+        db.personBookDao().loadPersonsAndBooks().observe(
+                this, new Observer<List<PersonWithBook>>() {
+            @Override
+            public void onChanged(@Nullable List<PersonWithBook> personWithBooks) {
+                Log.d("saasd", "Events Changed:");
+                personWithBookList.clear();
+                personWithBookList.addAll(personWithBooks);
+                arrayAdapter.notifyDataSetChanged();
+            }
+        });
+
 
         /*AppDatabase db = AppDatabase.getAppDatabase(this);
 
@@ -63,7 +88,7 @@ public class RelationActivity extends AppCompatActivity {
         startActivity(it);
     }
 
-    private static class PersonAsyncTask extends AsyncTask<Person, Void, PersonWithBook> {
+    private static class PersonAsyncTask extends AsyncTask<AppDatabase, Void, PersonWithBook> {
 
         private WeakReference<Activity> activity;
 
@@ -72,10 +97,10 @@ public class RelationActivity extends AppCompatActivity {
         }
 
         @Override
-        protected PersonWithBook doInBackground(Person... param) {
+        protected PersonWithBook doInBackground(AppDatabase... param) {
             AppDatabase db = AppDatabase.getAppDatabase(activity.get().getBaseContext());
 
-            db.personDao().insert(param[0]);
+            //db.personDao().insert(param[0]);
             return null;
         }
 

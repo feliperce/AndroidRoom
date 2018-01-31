@@ -31,4 +31,7 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
     //Stetho
     compile 'com.facebook.stetho:stetho:1.5.0'
+    // ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:1.1.0"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.0"
 }
