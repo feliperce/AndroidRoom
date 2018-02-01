@@ -20,9 +20,11 @@ import java.util.List;
 public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAdapter.ViewHolder> {
 
     private List<PersonWithBook> personWithBookList;
+    private Context context;
 
-    public PersonWithBookAdapter(List<PersonWithBook> personWithBookList) {
+    public PersonWithBookAdapter(List<PersonWithBook> personWithBookList, Context context) {
         this.personWithBookList = personWithBookList;
+        this.context = context;
     }
 
     @Override
@@ -39,6 +41,9 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
                         personWithBookList.get(position).person.getLastName()
                 ));
 
+        holder.bookQtTextView.setText(
+               context.getString(R.string.books_quantity, personWithBookList.get(position).bookList.size())
+        );
     }
 
     @Override

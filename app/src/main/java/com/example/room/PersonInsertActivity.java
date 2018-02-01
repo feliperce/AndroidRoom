@@ -36,35 +36,21 @@ public class PersonInsertActivity extends AppCompatActivity {
     }
 
     public void registerPerson(View view) {
-        Person person = new Person();
+        final Person person = new Person();
         person.setFirstName(firstNameEditText.getText().toString());
         person.setLastName(lastNameEditText.getText().toString());
         person.setAge(Integer.parseInt(ageEditText.getText().toString()));
         person.setEmail(emailEditText.getText().toString());
 
-        new InsertAsyncTask(this).execute(person);
-    }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase db = AppDatabase.getAppDatabase(getBaseContext());
 
-    private static class InsertAsyncTask extends AsyncTask<Person, Void, Void> {
+                db.personDao().insert(person);
+                finish();
+            }
+        }).start();
 
-        private WeakReference<Activity> activity;
-
-        public InsertAsyncTask(Activity activity) {
-            this.activity = new WeakReference<>(activity);
-        }
-
-        @Override
-        protected Void doInBackground(Person... param) {
-            AppDatabase db = AppDatabase.getAppDatabase(activity.get().getBaseContext());
-
-            db.personDao().insert(param[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            activity.get().finish();
-        }
     }
 }
