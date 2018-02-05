@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.Relation;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.List;
 
@@ -12,7 +14,9 @@ import java.util.List;
  */
 
 @Entity
-public class Person {
+public class Person implements Parcelable {
+
+    public static final String BUNDLE = "person";
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -22,6 +26,28 @@ public class Person {
     private String lastName;
     private int age;
     private String email;
+
+    public Person() {}
+
+    protected Person(Parcel in) {
+        id = in.readLong();
+        firstName = in.readString();
+        lastName = in.readString();
+        age = in.readInt();
+        email = in.readString();
+    }
+
+    public static final Creator<Person> CREATOR = new Creator<Person>() {
+        @Override
+        public Person createFromParcel(Parcel in) {
+            return new Person(in);
+        }
+
+        @Override
+        public Person[] newArray(int size) {
+            return new Person[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -61,5 +87,19 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeInt(age);
+        dest.writeString(email);
     }
 }

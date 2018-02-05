@@ -18,6 +18,8 @@ import java.util.List;
 
 public class RelationActivity extends AppCompatActivity {
 
+    public static final String DETAIL_BUNDLE = "detail";
+
     private RecyclerView personRecyclerView;
     private List<PersonWithBook> personWithBookList;
 
@@ -49,30 +51,6 @@ public class RelationActivity extends AppCompatActivity {
             }
         });
 
-
-        /*AppDatabase db = AppDatabase.getAppDatabase(this);
-
-        Person person = new Person();
-        person.setFirstName("Aaaaaa");
-        person.setLastName("Bbbbbbb");
-        person.setAge(26);
-        person.setEmail("fdsfsd@gmail.com");
-
-        db.personDao().insert(person);
-
-        List<Book> bookList = new ArrayList<>();
-        Book book = new Book();
-        book.setAuthor("AAAAAAA");
-        book.setName("Nnnnnnn");
-        book.setPersonId(1);
-        book.setReleaseDate(new Date());
-        bookList.add(book);
-
-        PersonWithBook personWithBook = new PersonWithBook();
-        personWithBook.person = person;
-        personWithBook.bookList = bookList;
-
-        db.bookDao().insert(book);*/
     }
 
     public void fabClick(View view) {

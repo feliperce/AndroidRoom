@@ -20,7 +20,7 @@ import com.example.room.persistence.entity.Person;
  * Created by felipe on 11/01/18.
  */
 
-@Database(entities = {Person.class, Book.class}, version = 2)
+@Database(entities = {Person.class, Book.class}, version = 1)
 @TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 

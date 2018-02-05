@@ -1,16 +1,19 @@
 package com.example.room;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.room.persistence.entity.Book;
+import com.example.room.persistence.entity.Person;
 import com.example.room.persistence.entity.PersonWithBook;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +37,7 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.personNameTextView.setText(
                 String.format("%s %s",
                         personWithBookList.get(position).person.getFirstName(),
@@ -44,6 +47,19 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
         holder.bookQtTextView.setText(
                context.getString(R.string.books_quantity, personWithBookList.get(position).bookList.size())
         );
+
+        holder.rootLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<Book> bookArrayList = new ArrayList<>();
+                bookArrayList.addAll(personWithBookList.get(position).bookList);
+
+                Intent it = new Intent(context, PersonDetailActivity.class);
+                it.putExtra(Person.BUNDLE, personWithBookList.get(position).person);
+                it.putParcelableArrayListExtra(Book.BUNDLE, bookArrayList);
+                context.startActivity(it);
+            }
+        });
     }
 
     @Override
@@ -54,11 +70,13 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView personNameTextView;
         TextView bookQtTextView;
+        LinearLayout rootLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
             personNameTextView = itemView.findViewById(R.id.nameTextView);
             bookQtTextView = itemView.findViewById(R.id.booksQtTextView);
+            rootLayout = itemView.findViewById(R.id.rootLayout);
         }
     }
 }
