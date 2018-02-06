@@ -1,5 +1,6 @@
 package com.example.room.persistence.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -29,7 +30,7 @@ public interface BookDao {
     void delete(Book book);
 
     @Query("SELECT * FROM books")
-    List<PersonWithBook> getAll();
+    LiveData<List<Book>> getAll();
 
     @Query("SELECT * FROM books WHERE id = :idbook")
     Book getById(int idbook);

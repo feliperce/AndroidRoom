@@ -8,4 +8,6 @@
     <string name="register_person_button">Register Person</string>
     <string name="booksLabel">Books:</string>
     <string name="books_quantity">Books quantity: %d</string>
+    <string name="update_menu">Update</string>
+    <string name="delete_menu">Delete</string>
 </resources>

@@ -24,10 +24,13 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
 
     private List<PersonWithBook> personWithBookList;
     private Context context;
+    private OnItemClickListener onItemClickListener;
 
-    public PersonWithBookAdapter(List<PersonWithBook> personWithBookList, Context context) {
+    public PersonWithBookAdapter(List<PersonWithBook> personWithBookList, Context context,
+                                 OnItemClickListener onItemClickListener) {
         this.personWithBookList = personWithBookList;
         this.context = context;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -51,13 +54,16 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
         holder.rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Book> bookArrayList = new ArrayList<>();
-                bookArrayList.addAll(personWithBookList.get(position).bookList);
+                onItemClickListener.onItemClick(position);
 
-                Intent it = new Intent(context, PersonDetailActivity.class);
-                it.putExtra(Person.BUNDLE, personWithBookList.get(position).person);
-                it.putParcelableArrayListExtra(Book.BUNDLE, bookArrayList);
-                context.startActivity(it);
+            }
+        });
+
+        holder.rootLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onItemClickListener.onItemLongClick(position);
+                return true;
             }
         });
     }
@@ -65,6 +71,10 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
     @Override
     public int getItemCount() {
         return personWithBookList==null ? 0 : personWithBookList.size();
+    }
+
+    public List<PersonWithBook> getPersonWithBookList() {
+        return personWithBookList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -78,5 +88,10 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
             bookQtTextView = itemView.findViewById(R.id.booksQtTextView);
             rootLayout = itemView.findViewById(R.id.rootLayout);
         }
+    }
+
+    interface OnItemClickListener {
+        void onItemClick(int position);
+        void onItemLongClick(int position);
     }
 }

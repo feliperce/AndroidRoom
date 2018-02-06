@@ -40,7 +40,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
         holder.titleTextView.setText(bookList.get(position).getName());
         holder.authorTextView.setText(bookList.get(position).getAuthor());
-        holder.authorTextView.setText(dateFormat.format(bookList.get(position).getReleaseDate()));
+        holder.releaseDateTextView.setText(dateFormat.format(bookList.get(position).getReleaseDate()));
     }
 
     @Override

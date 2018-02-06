@@ -11,17 +11,20 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.room.persistence.AppDatabase;
+import com.example.room.persistence.entity.Book;
+import com.example.room.persistence.entity.Person;
 import com.example.room.persistence.entity.PersonWithBook;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RelationActivity extends AppCompatActivity {
+public class RelationActivity extends AppCompatActivity implements PersonWithBookAdapter.OnItemClickListener {
 
     public static final String DETAIL_BUNDLE = "detail";
 
     private RecyclerView personRecyclerView;
     private List<PersonWithBook> personWithBookList;
+    private PersonWithBookAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,7 @@ public class RelationActivity extends AppCompatActivity {
 
         personWithBookList = new ArrayList<>(0);
 
-        final PersonWithBookAdapter arrayAdapter = new PersonWithBookAdapter(personWithBookList, this);
+        arrayAdapter = new PersonWithBookAdapter(personWithBookList, this, this);
 
         personRecyclerView.setLayoutManager(
                 new LinearLayoutManager(this,
@@ -57,5 +60,20 @@ public class RelationActivity extends AppCompatActivity {
         Intent it = new Intent(this, PersonInsertActivity.class);
         startActivity(it);
     }
-    
+
+    @Override
+    public void onItemClick(int position) {
+        ArrayList<Book> bookArrayList = new ArrayList<>();
+        bookArrayList.addAll(arrayAdapter.getPersonWithBookList().get(position).bookList);
+
+        Intent it = new Intent(this, PersonDetailActivity.class);
+        it.putExtra(Person.BUNDLE, personWithBookList.get(position).person);
+        it.putParcelableArrayListExtra(Book.BUNDLE, bookArrayList);
+        startActivity(it);
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
+
+    }
 }

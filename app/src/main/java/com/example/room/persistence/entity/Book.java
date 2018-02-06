@@ -21,7 +21,7 @@ public class Book implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private long id;
     @ColumnInfo(name = "person_id")
-    private int personId;
+    private long personId;
     private String name;
     private String author;
     @ColumnInfo(name = "release_date")
@@ -31,9 +31,10 @@ public class Book implements Parcelable {
 
     protected Book(Parcel in) {
         id = in.readLong();
-        personId = in.readInt();
+        personId = in.readLong();
         name = in.readString();
         author = in.readString();
+        releaseDate = new Date(in.readLong());
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -56,11 +57,11 @@ public class Book implements Parcelable {
         this.id = id;
     }
 
-    public int getPersonId() {
+    public long getPersonId() {
         return personId;
     }
 
-    public void setPersonId(int personId) {
+    public void setPersonId(long personId) {
         this.personId = personId;
     }
 
@@ -96,8 +97,9 @@ public class Book implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
-        dest.writeInt(personId);
+        dest.writeLong(personId);
         dest.writeString(name);
         dest.writeString(author);
+        dest.writeLong(releaseDate.getTime());
     }
 }
