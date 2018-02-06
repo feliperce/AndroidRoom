@@ -29,20 +29,22 @@
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
         android:hint="@string/email_hint"/>
 
     <EditText
         android:id="@+id/ageEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="number"
         android:hint="@string/age_hint"/>
 
     <Button
-        android:id="@+id/insertPersonButton"
+        android:id="@+id/updatePersonButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="@string/register_person_button"
+        android:text="@string/update_person"
         android:onClick="registerPerson"/>
 
     </LinearLayout>

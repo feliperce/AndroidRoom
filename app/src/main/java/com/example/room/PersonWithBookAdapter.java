@@ -3,7 +3,11 @@ package com.example.room;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -59,13 +63,6 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
             }
         });
 
-        holder.rootLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                onItemClickListener.onItemLongClick(position);
-                return true;
-            }
-        });
     }
 
     @Override
@@ -77,7 +74,7 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
         return personWithBookList;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         TextView personNameTextView;
         TextView bookQtTextView;
         LinearLayout rootLayout;
@@ -87,11 +84,38 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
             personNameTextView = itemView.findViewById(R.id.nameTextView);
             bookQtTextView = itemView.findViewById(R.id.booksQtTextView);
             rootLayout = itemView.findViewById(R.id.rootLayout);
+
+            itemView.setOnCreateContextMenuListener(this);
         }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            MenuItem deleteMenu = menu.add(Menu.NONE, 0, 0, R.string.delete_menu);
+            MenuItem updateMenu = menu.add(Menu.NONE, 1, 1, R.string.update_menu);
+
+            deleteMenu.setOnMenuItemClickListener(itemMenuClick);
+            updateMenu.setOnMenuItemClickListener(itemMenuClick);
+        }
+
+        private final MenuItem.OnMenuItemClickListener itemMenuClick = new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case 0:
+                        onItemClickListener.onItemDeleteClick(getAdapterPosition());
+                        return true;
+                    case 1:
+                        onItemClickListener.onItemUpdateClick(getAdapterPosition());
+                        return true;
+                }
+                return false;
+            }
+        };
     }
 
     interface OnItemClickListener {
         void onItemClick(int position);
-        void onItemLongClick(int position);
+        void onItemDeleteClick(int position);
+        void onItemUpdateClick(int position);
     }
 }
