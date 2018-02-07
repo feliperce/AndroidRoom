@@ -14,7 +14,7 @@ import java.util.Date;
  */
 
 @Entity(tableName = "books")
-public class Book implements Parcelable {
+public class Book {
 
     public static final String BUNDLE = "book";
 
@@ -28,26 +28,6 @@ public class Book implements Parcelable {
     private Date releaseDate;
 
     public Book() {}
-
-    protected Book(Parcel in) {
-        id = in.readLong();
-        personId = in.readLong();
-        name = in.readString();
-        author = in.readString();
-        releaseDate = new Date(in.readLong());
-    }
-
-    public static final Creator<Book> CREATOR = new Creator<Book>() {
-        @Override
-        public Book createFromParcel(Parcel in) {
-            return new Book(in);
-        }
-
-        @Override
-        public Book[] newArray(int size) {
-            return new Book[size];
-        }
-    };
 
     public long getId() {
         return id;
@@ -89,17 +69,4 @@ public class Book implements Parcelable {
         this.releaseDate = releaseDate;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeLong(personId);
-        dest.writeString(name);
-        dest.writeString(author);
-        dest.writeLong(releaseDate.getTime());
-    }
 }

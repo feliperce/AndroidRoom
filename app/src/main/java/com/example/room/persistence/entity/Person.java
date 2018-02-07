@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 @Entity
-public class Person implements Parcelable {
+public class Person {
 
     public static final String BUNDLE = "person";
 
@@ -28,26 +28,6 @@ public class Person implements Parcelable {
     private String email;
 
     public Person() {}
-
-    protected Person(Parcel in) {
-        id = in.readLong();
-        firstName = in.readString();
-        lastName = in.readString();
-        age = in.readInt();
-        email = in.readString();
-    }
-
-    public static final Creator<Person> CREATOR = new Creator<Person>() {
-        @Override
-        public Person createFromParcel(Parcel in) {
-            return new Person(in);
-        }
-
-        @Override
-        public Person[] newArray(int size) {
-            return new Person[size];
-        }
-    };
 
     public long getId() {
         return id;
@@ -89,17 +69,4 @@ public class Person implements Parcelable {
         this.email = email;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(firstName);
-        dest.writeString(lastName);
-        dest.writeInt(age);
-        dest.writeString(email);
-    }
 }
