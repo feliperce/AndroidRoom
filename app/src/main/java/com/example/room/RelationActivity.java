@@ -1,46 +1,52 @@
 package com.example.room;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.example.room.persistence.AppDatabase;
 import com.example.room.persistence.entity.Book;
 import com.example.room.persistence.entity.Person;
-import com.example.room.persistence.entity.PersonWithBook;
+import com.github.javafaker.Faker;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class RelationActivity extends AppCompatActivity implements PersonWithBookAdapter.OnItemClickListener {
-
-    public static final String DETAIL_BUNDLE = "detail";
+public class RelationActivity extends AppCompatActivity implements PersonAdapter.OnItemClickListener {
 
     private RecyclerView personRecyclerView;
-    private List<PersonWithBook> personWithBookList;
-    private PersonWithBookAdapter arrayAdapter;
+    private ProgressBar progressBar;
+    private List<Person> personList;
+    private PersonAdapter arrayAdapter;
     private AppDatabase db;
+    private Faker faker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relation);
 
+        faker = new Faker();
+
         personRecyclerView = findViewById(R.id.personRecyclerView);
+        progressBar = findViewById(R.id.progressBar);
 
-        personWithBookList = new ArrayList<>(0);
+        personList = new ArrayList<>(0);
 
-        arrayAdapter = new PersonWithBookAdapter(personWithBookList, this, this);
+        arrayAdapter = new PersonAdapter(personList, this, this);
 
         personRecyclerView.setLayoutManager(
                 new LinearLayoutManager(this,
@@ -50,14 +56,13 @@ public class RelationActivity extends AppCompatActivity implements PersonWithBoo
         registerForContextMenu(personRecyclerView);
 
         db = AppDatabase.getAppDatabase(this);
-        db.personBookDao().loadPersonsAndBooks().observe(
-                this, new Observer<List<PersonWithBook>>() {
+        db.personDao().getAll().observe(this, new Observer<List<Person>>() {
             @Override
-            public void onChanged(@Nullable List<PersonWithBook> personWithBooks) {
-                Log.d("saasd", "Events Changed:");
-                personWithBookList.clear();
-                personWithBookList.addAll(personWithBooks);
+            public void onChanged(@Nullable List<Person> newPersonList) {
+                personList.clear();
+                personList.addAll(newPersonList);
                 arrayAdapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -73,12 +78,9 @@ public class RelationActivity extends AppCompatActivity implements PersonWithBoo
 
     @Override
     public void onItemClick(int position) {
-        ArrayList<Book> bookArrayList = new ArrayList<>();
-        bookArrayList.addAll(arrayAdapter.getPersonWithBookList().get(position).bookList);
 
         Intent it = new Intent(this, PersonDetailActivity.class);
-        it.putExtra(Person.BUNDLE, personWithBookList.get(position).person);
-        it.putParcelableArrayListExtra(Book.BUNDLE, bookArrayList);
+        it.putExtra(Person.BUNDLE, personList.get(position));
         startActivity(it);
     }
 
@@ -87,7 +89,7 @@ public class RelationActivity extends AppCompatActivity implements PersonWithBoo
         new Thread(new Runnable() {
             @Override
             public void run() {
-                db.personDao().delete(personWithBookList.get(position).person);
+                db.personDao().delete(personList.get(position));
             }
         }).start();
     }
@@ -97,8 +99,34 @@ public class RelationActivity extends AppCompatActivity implements PersonWithBoo
         createUpdateDialog(position);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.addNItem:
+                createRandomInsertDialog();
+                return true;
+            case R.id.removeAllPersonData:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        db.personDao().deleteAllPerson();
+                    }
+                }).start();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void createUpdateDialog(int position) {
-        final Person person = personWithBookList.get(position).person;
+        final Person person = personList.get(position);
 
         final Dialog dialog = new Dialog(this, R.style.Theme_AppCompat_Light_Dialog_Alert);
         dialog.setContentView(R.layout.update_person_dialog);
@@ -136,5 +164,43 @@ public class RelationActivity extends AppCompatActivity implements PersonWithBoo
 
         dialog.show();
 
+    }
+
+    private void createRandomInsertDialog() {
+        final EditText editText = new EditText(this);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Insert N random data");
+        builder.setMessage("choose random number amount");
+        builder.setView(editText);
+        builder.setPositiveButton(getString(R.string.register), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int amount = Integer.parseInt(editText.getText().toString());
+
+                if(amount>0) {
+                    final List<Person> personList = new ArrayList<>();
+
+                    for(int i = 0; i < amount; i++) {
+                        Person person = new Person();
+                        person.setFirstName(faker.gameOfThrones().character());
+                        person.setLastName(faker.pokemon().name());
+                        person.setAge(faker.number().numberBetween(10, 100));
+                        person.setEmail(faker.internet().emailAddress());
+                        personList.add(person);
+                    }
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            db.personDao().insertAll(personList);
+                        }
+                    }).start();
+
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        builder.create().show();
     }
 }

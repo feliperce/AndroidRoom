@@ -34,4 +34,6 @@ dependencies {
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:1.1.0"
     annotationProcessor "android.arch.lifecycle:compiler:1.1.0"
+    //Faker
+    compile group: 'com.github.javafaker', name: 'javafaker', version: '0.14'
 }

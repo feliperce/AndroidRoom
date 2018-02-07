@@ -1,9 +1,7 @@
 package com.example.room;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,26 +11,24 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.room.persistence.entity.Book;
 import com.example.room.persistence.entity.Person;
 import com.example.room.persistence.entity.PersonWithBook;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by felipe on 23/01/18.
  */
 
-public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAdapter.ViewHolder> {
+public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder> {
 
-    private List<PersonWithBook> personWithBookList;
+    private List<Person> personList;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public PersonWithBookAdapter(List<PersonWithBook> personWithBookList, Context context,
-                                 OnItemClickListener onItemClickListener) {
-        this.personWithBookList = personWithBookList;
+    public PersonAdapter(List<Person> personList, Context context,
+                         OnItemClickListener onItemClickListener) {
+        this.personList = personList;
         this.context = context;
         this.onItemClickListener = onItemClickListener;
     }
@@ -47,13 +43,11 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.personNameTextView.setText(
                 String.format("%s %s",
-                        personWithBookList.get(position).person.getFirstName(),
-                        personWithBookList.get(position).person.getLastName()
+                        personList.get(position).getFirstName(),
+                        personList.get(position).getLastName()
                 ));
 
-        holder.bookQtTextView.setText(
-               context.getString(R.string.books_quantity, personWithBookList.get(position).bookList.size())
-        );
+        holder.personEmailTextView.setText(personList.get(position).getEmail());
 
         holder.rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,22 +61,22 @@ public class PersonWithBookAdapter extends RecyclerView.Adapter<PersonWithBookAd
 
     @Override
     public int getItemCount() {
-        return personWithBookList==null ? 0 : personWithBookList.size();
+        return personList==null ? 0 : personList.size();
     }
 
-    public List<PersonWithBook> getPersonWithBookList() {
-        return personWithBookList;
+    public List<Person> getPersonList() {
+        return personList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         TextView personNameTextView;
-        TextView bookQtTextView;
+        TextView personEmailTextView;
         LinearLayout rootLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
             personNameTextView = itemView.findViewById(R.id.nameTextView);
-            bookQtTextView = itemView.findViewById(R.id.booksQtTextView);
+            personEmailTextView = itemView.findViewById(R.id.emailTextView);
             rootLayout = itemView.findViewById(R.id.rootLayout);
 
             itemView.setOnCreateContextMenuListener(this);

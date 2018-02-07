@@ -19,9 +19,9 @@
         app:layout_constraintBottom_toBottomOf="@+id/deletePersonButton"/>
 
     <TextView
-        android:id="@+id/booksQtTextView"
-        android:layout_width="match_parent"
+        android:id="@+id/emailTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/books_quantity"/>
+        tools:text="email@email.com"/>
 
 </LinearLayout>
