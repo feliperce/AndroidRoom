@@ -21,4 +21,7 @@ public interface PersonBookDao {
     @Query("SELECT * FROM person")
     LiveData<List<PersonWithBook>> loadPersonsAndBooks();
 
+    @Query("SELECT * FROM person WHERE id = :idperson")
+    LiveData<PersonWithBook> getPersonWithBooks(long idperson);
+
 }

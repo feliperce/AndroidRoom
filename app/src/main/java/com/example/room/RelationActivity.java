@@ -78,9 +78,8 @@ public class RelationActivity extends AppCompatActivity implements PersonAdapter
 
     @Override
     public void onItemClick(int position) {
-
         Intent it = new Intent(this, PersonDetailActivity.class);
-        it.putExtra(Person.BUNDLE, personList.get(position));
+        it.putExtra(Person.BUNDLE, personList.get(position).getId());
         startActivity(it);
     }
 

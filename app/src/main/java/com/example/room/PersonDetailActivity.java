@@ -1,6 +1,9 @@
 package com.example.room;
 
 import android.app.Dialog;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +22,7 @@ import com.example.room.persistence.entity.PersonWithBook;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PersonDetailActivity extends AppCompatActivity {
 
@@ -28,8 +32,8 @@ public class PersonDetailActivity extends AppCompatActivity {
     private RecyclerView booksRecyclerView;
     private BookAdapter bookAdapter;
     private AppDatabase db;
-    private Person person;
-    private ArrayList<Book> bookArrayList;
+    private LiveData<PersonWithBook> personWithBookLiveData;
+    private PersonWithBook personWithBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +45,27 @@ public class PersonDetailActivity extends AppCompatActivity {
         emailTextView = findViewById(R.id.emailTextView);
         booksRecyclerView = findViewById(R.id.booksRecyclerView);
 
-        person = getIntent().getParcelableExtra(Person.BUNDLE);
-        bookArrayList = getIntent().getParcelableArrayListExtra(Book.BUNDLE);
+        db = AppDatabase.getAppDatabase(this);
 
-        nameTextView.setText(
-            String.format("%s %s", person.getFirstName(), person.getLastName())
-        );
-        emailTextView.setText(person.getEmail());
+        personWithBook = new PersonWithBook();
+        personWithBook.bookList = new ArrayList<>();
 
-        bookAdapter = new BookAdapter(bookArrayList, this);
+        db.personBookDao().getPersonWithBooks(getIntent().getExtras().getLong(Person.BUNDLE)).observe(this, new Observer<PersonWithBook>() {
+            @Override
+            public void onChanged(@Nullable PersonWithBook newPersonWithBook) {
+                personWithBook.person = newPersonWithBook.person;
+                personWithBook.bookList.clear();
+                personWithBook.bookList.addAll(newPersonWithBook.bookList);
+                nameTextView.setText(
+                        String.format("%s %s", personWithBook.person.getFirstName(), personWithBook.person.getLastName())
+                );
+                emailTextView.setText(personWithBook.person.getEmail());
+            }
+        });
+
+        bookAdapter = new BookAdapter(personWithBook.bookList, this);
         booksRecyclerView.setAdapter(bookAdapter);
         booksRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        db = AppDatabase.getAppDatabase(this);
 
         addBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,8 +91,8 @@ public class PersonDetailActivity extends AppCompatActivity {
                 book.setName(titleEditText.getText().toString());
                 book.setAuthor(authorEditText.getText().toString());
                 book.setReleaseDate(new Date());
-                book.setPersonId(person.getId());
-                bookArrayList.add(book);
+                book.setPersonId(personWithBook.person.getId());
+                personWithBook.bookList.add(book);
                 bookAdapter.notifyDataSetChanged();
                 new Thread(new Runnable() {
                     @Override
